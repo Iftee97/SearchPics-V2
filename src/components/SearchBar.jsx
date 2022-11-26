@@ -1,12 +1,16 @@
 import { useState } from "react"
+import { useImagesContext } from "../hooks/useImagesContext"
+import { searchImages } from "../api"
 import './SearchBar.css'
 
-export default function SearchBar({ onSubmit }) {
+export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("")
+  const { dispatch } = useImagesContext()
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault()
-    onSubmit(searchTerm.toLowerCase())
+    const images = await searchImages(searchTerm.toLowerCase())
+    dispatch({ type: "SET_IMAGES", payload: images })
   }
 
   return (
